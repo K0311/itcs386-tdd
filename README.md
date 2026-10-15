@@ -1,1 +1,3 @@
-# itcs386-tdd
+# ITCS386 TDD Lab
+
+Python unit testing and test-driven development practice.
