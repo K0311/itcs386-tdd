@@ -18,8 +18,9 @@ class Quantity:
     def plus(self, other):
         return Sum(self, other)
     
-    def reduce(self, unit):
-        return self
+    def reduce(self, converter, unit):
+        rate = converter.rate(self.unit, unit)
+        return Quantity(self.amount * rate, unit)
     
 def grams(amount):
     return Quantity(amount, "g")
@@ -29,17 +30,28 @@ def ounces(amount):
     return Quantity(amount, "oz")
 
 class Converter:
-     def reduce(self, source, unit):
-        return source.reduce(unit)
-     
-     def add_rate(self, from_unit, to_unit, rate):
-        pass
+    def __init__(self):
+        self.rates = {}
+
+    def add_rate(self, from_unit, to_unit, rate):
+        self.rates[(from_unit, to_unit)] = rate
+
+    def rate(self, from_unit, to_unit):
+        if from_unit == to_unit:
+            return 1
+
+        return self.rates[(from_unit, to_unit)]
+
+    def reduce(self, source, unit):
+        return source.reduce(self, unit)
  
 class Sum:
     def __init__(self, left, right):
         self.left = left
         self.right = right
 
-    def reduce(self, unit):
-        amount = self.left.amount + self.right.amount
-        return Quantity(amount, unit)
+    def reduce(self, converter, unit):
+        left = self.left.reduce(converter, unit)
+        right = self.right.reduce(converter, unit)
+
+        return Quantity(left.amount + right.amount, unit)
