@@ -21,10 +21,6 @@ class Quantity:
     def reduce(self, unit):
         return self
     
-    def reduce(self, unit):
-        amount = self.left.amount + self.right.amount
-        return Quantity(amount, unit)
-    
 def grams(amount):
     return Quantity(amount, "g")
 
