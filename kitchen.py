@@ -40,3 +40,7 @@ class Sum:
     def __init__(self, left, right):
         self.left = left
         self.right = right
+
+    def reduce(self, unit):
+        amount = self.left.amount + self.right.amount
+        return Quantity(amount, unit)
